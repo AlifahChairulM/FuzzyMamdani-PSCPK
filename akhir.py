@@ -9,13 +9,137 @@ import os
 # --- 1. KONFIGURASI HALAMAN ---
 st.set_page_config(page_title="234_248", layout="wide")
 
+# --- CUSTOM CSS DESIGN ---
+st.markdown("""
+<style>
+
+/* ===== GLOBAL ===== */
+.stApp {
+    background-color: #f8f2ef;
+    color: #7a4e42;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== SIDEBAR ===== */
+section[data-testid="stSidebar"] {
+    background-color: #f3e4de;
+    border-right: 1px solid #e6c8bc;
+}
+
+section[data-testid="stSidebar"] * {
+    color: #8b5e52 !important;
+}
+
+/* Radio menu */
+div[role="radiogroup"] label {
+    background-color: transparent;
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 5px;
+    transition: 0.3s;
+}
+
+div[role="radiogroup"] label:hover {
+    background-color: #efd6cc;
+}
+
+/* ===== TITLE ===== */
+h1, h2, h3 {
+    color: #9c5f4d !important;
+    font-weight: 700 !important;
+}
+
+/* ===== CARD / CONTAINER ===== */
+div[data-testid="stMetric"] {
+    background-color: #fff8f5;
+    border: 1px solid #e8cfc4;
+    border-radius: 18px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(180, 120, 100, 0.08);
+}
+
+/* ===== BUTTON ===== */
+.stButton > button {
+    background-color: #d98f7a;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.5rem 1rem;
+    transition: 0.3s;
+}
+
+.stButton > button:hover {
+    background-color: #c97861;
+    color: white;
+}
+
+/* ===== SLIDER ===== */
+.stSlider > div > div {
+    color: #d98f7a !important;
+}
+
+/* ===== SELECTBOX ===== */
+.stSelectbox div[data-baseweb="select"] {
+    background-color: #fff8f5;
+    border-radius: 12px;
+    border: 1px solid #e4c8bc;
+}
+
+/* ===== DATAFRAME ===== */
+[data-testid="stDataFrame"] {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #e6cfc4;
+}
+
+/* ===== EXPANDER ===== */
+details {
+    background-color: #fff8f5;
+    border: 1px solid #e6cfc4;
+    border-radius: 14px;
+    padding: 10px;
+}
+
+/* ===== INFO / SUCCESS / WARNING ===== */
+.stAlert {
+    border-radius: 14px;
+}
+
+/* ===== INPUT BOX ===== */
+input, textarea {
+    border-radius: 12px !important;
+    border: 1px solid #e6cfc4 !important;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f3e4de;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d9a08d;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #c97861;
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 # --- 2. LOAD & PREPROCESS DATA ---
 @st.cache_data
 def load_and_clean_data():
     try:
         base_path = os.path.dirname(__file__)
         file_path = os.path.join(base_path, 'leptop.csv')
-        if not os.path.exists(file_path): file_path = 'leptop.csv'
+        if not os.path.exists(file_path): 
+            file_path = 'leptop.csv'
             
         df = pd.read_csv(file_path)
         df.columns = df.columns.str.strip()
@@ -30,6 +154,7 @@ def load_and_clean_data():
         df_final = df.sample(n=300, random_state=42).reset_index(drop=True)
         df_final.insert(0, 'No', range(1, len(df_final) + 1))
         return df_final
+        
     except Exception as e:
         st.error(f"Error pada Dataset: {e}")
         return pd.DataFrame()
